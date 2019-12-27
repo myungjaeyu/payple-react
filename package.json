@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/myungjaeyu/payple-react.git"
@@ -19,10 +19,12 @@
   "homepage": "https://github.com/myungjaeyu/payple-react#readme",
   "devDependencies": {
     "@types/react": "^16.9.17",
+    "html-webpack-plugin": "^3.2.0",
     "react": "^16.12.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.4",
     "webpack": "^4.41.4",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
   }
 }
