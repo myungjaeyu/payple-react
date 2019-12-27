@@ -19,5 +19,8 @@ module.exports = {
     },
     resolve: {
         extensions: [ '.tsx', '.ts', '.js']
+    },
+    externals: {
+        axios: 'axios'
     }
 }
