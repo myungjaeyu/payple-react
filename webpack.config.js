@@ -21,6 +21,7 @@ module.exports = {
         extensions: [ '.tsx', '.ts', '.js']
     },
     externals: {
-        axios: 'axios'
+        axios: 'axios',
+        react: 'react'
     }
 }
