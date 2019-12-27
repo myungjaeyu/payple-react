@@ -53,24 +53,35 @@ type Props = {
 const Payple: FC<Props> = ({ data, onCallback, children }) => {
 
     const [flag, setFlag] = useState(false)
+    const [attachedEvent, setAttachedEvent] = useState(false)
 
     const popup = (formElement: HTMLFormElement) : void => {
 
-        const callback = ({ data: { type, data }}) => (
-            onCallback(type === 'pay_result' ? data : null), 
-            setFlag(false)
-        )
+        if (!attachedEvent) {
 
-        if (null == window.open('', formElement.target, features)) return alert(' 팝업이 차단되어 결제를 진행할 수 없습니다. \r\n 폰 설정에서 팝업차단을 풀어주세요.')
+            window.addEventListener('message', ({ data: { type, data }}) => type !== 'resize' && (onCallback(type === 'pay_result' ? data : null), setFlag(false)))
+
+            setAttachedEvent(true)
+
+        }
+
+        if (window.navigator.userAgent.toLowerCase().match(/(iphone|ipod|ipad|android)/)) {
+
+            formElement.target = 'cpayWinOpen'
+
+            if (null == window.open('', formElement.target, features)) return alert(' 팝업이 차단되어 결제를 진행할 수 없습니다. \r\n 폰 설정에서 팝업차단을 풀어주세요.')
+
+        } else {
+
+            formElement.target = 'cpay_ifr'
+
+            setFlag(true)
+
+        }
 
         window.document.body.appendChild(formElement)
 
         formElement.submit()
-
-        setFlag(true)
-
-        window.removeEventListener('message', callback)
-        window.addEventListener('message', callback)
 
     }
 

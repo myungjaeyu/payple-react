@@ -2,7 +2,7 @@ export default (values: any, returnURL: string ) : HTMLFormElement => {
 
     const formElement : HTMLFormElement = window.document.createElement('form')
 
-    Object.assign(formElement, { id: 'CpayFrom', method: 'POST', action: returnURL, target: 'cpayWinOpen' })
+    Object.assign(formElement, { id: 'CpayFrom', method: 'POST', action: returnURL })
 
     Object.keys(values).reduce((acc, cur) => {
 
