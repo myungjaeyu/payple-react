@@ -3,6 +3,16 @@ import React, { FC, cloneElement } from 'react'
 import authenticate from './authenticate'
 import renderHTMLForm from './renderHTMLForm'
 
+const features = `
+    width:450px,
+    height:100%,
+    toolbars=no,
+    menubars=no,
+    status=no,
+    resizable=no,
+    location=no
+`
+
 type Data = {
     PCD_CST_ID: string,
     PCD_CUST_KEY: string,
@@ -40,6 +50,21 @@ type Props = {
 
 const Payple: FC<Props> = ({ data, onCallback, children }) => {
 
+    const popup = (formElement: HTMLFormElement) : void => {
+
+        const callback = ({ data: { type, data }}) => onCallback(type === 'pay_result' ? data : null)
+
+        if (null == window.open('', formElement.target, features)) return alert(' 팝업이 차단되어 결제를 진행할 수 없습니다. \r\n 폰 설정에서 팝업차단을 풀어주세요.')
+
+        window.document.body.appendChild(formElement)
+
+        formElement.submit()
+
+        window.removeEventListener('message', callback)
+        window.addEventListener('message', callback)
+
+    }
+
     const run = () : void => {
 
         const { PCD_AUTH_URL, PCD_CST_ID, PCD_CUST_KEY } = data
@@ -58,7 +83,7 @@ const Payple: FC<Props> = ({ data, onCallback, children }) => {
                     PCD_HTTP_REFERER: window.location.href
                 }), return_url)
 
-                console.log(formElement)
+                popup(formElement)
 
             })
 
