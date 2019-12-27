@@ -1,5 +1,7 @@
 import React, { FC, cloneElement } from 'react'
 
+import authenticate from './authenticate'
+
 type Data = {
     PCD_CST_ID: string,
     PCD_CUST_KEY: string,
@@ -41,7 +43,12 @@ const Payple: FC<Props> = ({ data, onCallback, children }) => {
 
         const { PCD_AUTH_URL, PCD_CST_ID, PCD_CUST_KEY } = data
 
-        console.log(PCD_AUTH_URL, PCD_CST_ID, PCD_CUST_KEY)
+        authenticate(PCD_AUTH_URL, PCD_CST_ID, PCD_CUST_KEY)
+            .then(({ result, cst_id, custKey, AuthKey, return_url, result_msg }) => {
+
+                console.log(result, cst_id, custKey, AuthKey, return_url)
+
+            })
 
     }
 
