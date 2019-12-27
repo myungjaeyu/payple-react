@@ -1,7 +1,9 @@
-import React, { FC, cloneElement } from 'react'
+import React, { FC, cloneElement, useState } from 'react'
 
 import authenticate from './authenticate'
 import renderHTMLForm from './renderHTMLForm'
+
+import Layer from './Layer'
 
 const features = `
     width:450px,
@@ -50,15 +52,22 @@ type Props = {
 
 const Payple: FC<Props> = ({ data, onCallback, children }) => {
 
+    const [flag, setFlag] = useState(false)
+
     const popup = (formElement: HTMLFormElement) : void => {
 
-        const callback = ({ data: { type, data }}) => onCallback(type === 'pay_result' ? data : null)
+        const callback = ({ data: { type, data }}) => (
+            onCallback(type === 'pay_result' ? data : null), 
+            setFlag(false)
+        )
 
         if (null == window.open('', formElement.target, features)) return alert(' 팝업이 차단되어 결제를 진행할 수 없습니다. \r\n 폰 설정에서 팝업차단을 풀어주세요.')
 
         window.document.body.appendChild(formElement)
 
         formElement.submit()
+
+        setFlag(true)
 
         window.removeEventListener('message', callback)
         window.addEventListener('message', callback)
@@ -72,8 +81,7 @@ const Payple: FC<Props> = ({ data, onCallback, children }) => {
         authenticate(PCD_AUTH_URL, PCD_CST_ID, PCD_CUST_KEY)
             .then(({ result, cst_id, custKey, AuthKey, return_url, result_msg }) => {
 
-                if (result !== 'success') 
-                    return alert(result_msg)
+                if (result !== 'success') return alert(result_msg)
 
                 const formElement : HTMLFormElement = renderHTMLForm(Object.assign({}, data, {
                     PCD_CST_ID: cst_id,
@@ -91,6 +99,8 @@ const Payple: FC<Props> = ({ data, onCallback, children }) => {
 
     return (
         <div>
+
+            { flag && <Layer /> }
 
             { cloneElement(children, { onClick: run })}
 
