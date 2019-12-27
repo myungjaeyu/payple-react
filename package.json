@@ -1,8 +1,8 @@
 {
   "name": "payple-react",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/payple-react.js",
   "scripts": {
     "build": "tsc --declaration && webpack --mode=production",
     "dev": "webpack-dev-server --mode=development --config=example/webpack.config.js"
