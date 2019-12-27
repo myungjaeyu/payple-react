@@ -1,6 +1,7 @@
 import React, { FC, cloneElement } from 'react'
 
 import authenticate from './authenticate'
+import renderHTMLForm from './renderHTMLForm'
 
 type Data = {
     PCD_CST_ID: string,
@@ -46,7 +47,18 @@ const Payple: FC<Props> = ({ data, onCallback, children }) => {
         authenticate(PCD_AUTH_URL, PCD_CST_ID, PCD_CUST_KEY)
             .then(({ result, cst_id, custKey, AuthKey, return_url, result_msg }) => {
 
-                console.log(result, cst_id, custKey, AuthKey, return_url)
+                if (result !== 'success') 
+                    return alert(result_msg)
+
+                const formElement : HTMLFormElement = renderHTMLForm(Object.assign({}, data, {
+                    PCD_CST_ID: cst_id,
+                    PCD_CUST_KEY: custKey,
+                    PCD_AUTH_KEY: AuthKey,
+                    PCD_RST_URL: '',
+                    PCD_HTTP_REFERER: window.location.href
+                }), return_url)
+
+                console.log(formElement)
 
             })
 
